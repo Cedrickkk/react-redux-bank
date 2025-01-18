@@ -1,4 +1,4 @@
-import { createStore } from "redux";
+import { createStore, Store } from "redux";
 
 const initialState = {
   balance: 0,
@@ -76,18 +76,37 @@ const reducer = (state: State = initialState, action: Action) => {
   }
 };
 
-const store = createStore(reducer);
+const store: Store<State, Action> = createStore(reducer);
 
-store.dispatch({
-  type: ActionType.SET_ACCOUNT_DEPOSIT,
-  payload: { amount: 5000 },
-});
+// Action Creators
+const deposit = ({ amount }: DepositPayload): Action => {
+  return {
+    type: ActionType.SET_ACCOUNT_DEPOSIT,
+    payload: { amount },
+  };
+};
 
-console.log(store.getState());
+const withdraw = ({ amount }: WithdrawPayload): Action => {
+  return {
+    type: ActionType.SET_ACCOUNT_WITHDRAW,
+    payload: { amount },
+  };
+};
 
-store.dispatch({
-  type: ActionType.SET_ACCOUNT_REQUEST_LOAN,
-  payload: { amount: 2000, purpose: "Learning purpose" },
-});
+const requestLoan = ({ amount, purpose }: RequestLoanPayload): Action => {
+  return {
+    type: ActionType.SET_ACCOUNT_REQUEST_LOAN,
+    payload: { amount, purpose },
+  };
+};
+
+const payLoan = ({ amount }: PayLoanPayload): Action => {
+  return {
+    type: ActionType.SET_ACCOUNT_PAY_LOAN,
+    payload: { amount },
+  };
+};
+
+store.dispatch(deposit({ amount: 600 }));
 
 console.log(store.getState());

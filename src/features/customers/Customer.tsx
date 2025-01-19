@@ -19,7 +19,7 @@ export default function Customer() {
   return (
     <>
       <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-        Welcome 👋, {fullname}
+        Welcome 👋, {fullname.toUpperCase()}
       </h3>
       <p className="text-lg text-muted-foreground">Your account operations</p>
       <form action="" className="flex flex-col gap-2">
@@ -31,7 +31,7 @@ export default function Customer() {
           <div className="w-1/2">
             <Label htmlFor="currency">Currency</Label>
             <Select>
-              <SelectTrigger>
+              <SelectTrigger id="currency">
                 <SelectValue placeholder="Select a currency" />
               </SelectTrigger>
               <SelectContent>

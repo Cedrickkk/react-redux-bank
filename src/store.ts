@@ -9,4 +9,8 @@ const root = combineReducers({
 
 const store = createStore(root);
 
+export type AppStore = typeof store;
+export type RootState = ReturnType<AppStore["getState"]>;
+export type AppDispatch = AppStore["dispatch"];
+
 export default store;

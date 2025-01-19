@@ -1,23 +1,10 @@
 import { Reducer } from "redux";
 
-const initialStateAccount: Readonly<AccountState> = {
-  balance: 0,
-  loan: 0,
-  loanPurpose: "",
-};
-
-export type AccountState = {
+type AccountState = {
   balance: number;
   loan: number;
   loanPurpose: string;
 };
-
-enum AccountActionType {
-  DEPOSIT = "account/deposit",
-  WITHDRAW = "account/withdraw",
-  REQUEST_LOAN = "account/requestLoan",
-  PAY_LOAN = "account/payLoan",
-}
 
 type DepositPayload = {
   amount: number;
@@ -36,13 +23,26 @@ type PayLoanPayload = {
   amount: number;
 };
 
+enum AccountActionType {
+  DEPOSIT = "account/deposit",
+  WITHDRAW = "account/withdraw",
+  REQUEST_LOAN = "account/requestLoan",
+  PAY_LOAN = "account/payLoan",
+}
+
 type AccountAction =
   | { type: AccountActionType.DEPOSIT; payload: DepositPayload }
   | { type: AccountActionType.WITHDRAW; payload: WithdrawPayload }
   | { type: AccountActionType.REQUEST_LOAN; payload: RequestLoanPayload }
   | { type: AccountActionType.PAY_LOAN; payload: PayLoanPayload };
 
-export const accountReducer: Reducer<AccountState, AccountAction> = (
+const initialStateAccount: Readonly<AccountState> = {
+  balance: 0,
+  loan: 0,
+  loanPurpose: "",
+};
+
+const accountReducer: Reducer<AccountState, AccountAction> = (
   state: AccountState = initialStateAccount,
   action: AccountAction
 ): AccountState => {
@@ -76,7 +76,6 @@ export const accountReducer: Reducer<AccountState, AccountAction> = (
   }
 };
 
-// Action Creators
 export const deposit = ({ amount }: DepositPayload): AccountAction => ({
   type: AccountActionType.DEPOSIT,
   payload: { amount },
@@ -99,3 +98,5 @@ export const payLoan = ({ amount }: PayLoanPayload): AccountAction => ({
   type: AccountActionType.PAY_LOAN,
   payload: { amount },
 });
+
+export default accountReducer;

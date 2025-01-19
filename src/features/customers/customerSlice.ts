@@ -1,21 +1,10 @@
 import { Reducer } from "redux";
 
-const initialStateCustomer: Readonly<CustomerState> = {
-  fullname: "",
-  nationalId: "",
-  createdAt: "",
-};
-
 type CustomerState = {
   fullname: string;
   nationalId: string;
   createdAt?: string;
 };
-
-enum CustomerActionType {
-  CREATE = "customer/create",
-  UPDATE = "customer/update",
-}
 
 type CreateCustomerPayload = {
   fullname: string;
@@ -28,6 +17,11 @@ type UpdateCustomerPayload = {
   nationalId?: string;
 };
 
+enum CustomerActionType {
+  CREATE = "customer/create",
+  UPDATE = "customer/update",
+}
+
 type CustomerAction =
   | {
       type: CustomerActionType.CREATE;
@@ -38,7 +32,13 @@ type CustomerAction =
       payload: UpdateCustomerPayload;
     };
 
-export const customerReducer: Reducer<CustomerState, CustomerAction> = (
+const initialStateCustomer: Readonly<CustomerState> = {
+  fullname: "",
+  nationalId: "",
+  createdAt: "",
+};
+
+const customerReducer: Reducer<CustomerState, CustomerAction> = (
   state: CustomerState = initialStateCustomer,
   action: CustomerAction
 ): CustomerState => {
@@ -60,7 +60,6 @@ export const customerReducer: Reducer<CustomerState, CustomerAction> = (
   }
 };
 
-// Action Creators
 export const createCustomer = ({
   fullname,
   nationalId,
@@ -79,3 +78,5 @@ export const updateCustomer = ({
     payload: { fullname },
   };
 };
+
+export default customerReducer;

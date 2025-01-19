@@ -1,6 +1,6 @@
 import { combineReducers, createStore } from "redux";
-import { accountReducer } from "./slices/accountSlice";
-import { createCustomer, customerReducer } from "./slices/customerSlice";
+import accountReducer from "./features/accounts/accountSlice";
+import customerReducer from "./features/customers/customerSlice";
 
 const root = combineReducers({
   account: accountReducer,
@@ -9,6 +9,4 @@ const root = combineReducers({
 
 const store = createStore(root);
 
-store.dispatch(createCustomer({ fullname: "Test", nationalId: "0000" }));
-
-console.log(store.getState());
+export default store;

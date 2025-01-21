@@ -1,6 +1,6 @@
 import { Reducer } from "redux";
 
-type CustomerState = {
+export type CustomerState = {
   fullname: string;
   nationalId: string;
   createdAt?: string;
@@ -22,7 +22,7 @@ enum CustomerActionType {
   UPDATE = "customer/update",
 }
 
-type CustomerAction =
+export type CustomerAction =
   | {
       type: CustomerActionType.CREATE;
       payload: CreateCustomerPayload;
@@ -40,7 +40,7 @@ const initialStateCustomer: Readonly<CustomerState> = {
 
 const customerReducer: Reducer<CustomerState, CustomerAction> = (
   state: CustomerState = initialStateCustomer,
-  action: CustomerAction
+  action: CustomerAction,
 ): CustomerState => {
   switch (action.type) {
     case CustomerActionType.CREATE:

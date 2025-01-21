@@ -1,6 +1,6 @@
 import { Reducer } from "redux";
 
-type AccountState = {
+export type AccountState = {
   balance: number;
   loan: number;
   loanPurpose: string;
@@ -30,7 +30,7 @@ enum AccountActionType {
   PAY_LOAN = "account/payLoan",
 }
 
-type AccountAction =
+export type AccountAction =
   | { type: AccountActionType.DEPOSIT; payload: DepositPayload }
   | { type: AccountActionType.WITHDRAW; payload: WithdrawPayload }
   | { type: AccountActionType.REQUEST_LOAN; payload: RequestLoanPayload }
@@ -44,7 +44,7 @@ const initialStateAccount: Readonly<AccountState> = {
 
 const accountReducer: Reducer<AccountState, AccountAction> = (
   state: AccountState = initialStateAccount,
-  action: AccountAction
+  action: AccountAction,
 ): AccountState => {
   switch (action.type) {
     case AccountActionType.DEPOSIT:

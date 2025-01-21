@@ -9,12 +9,19 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { createCustomer } from "./customerSlice";
 
 export default function CreateCustomer() {
   const [fullname, setFullname] = useState("");
   const [nationalId, setNationalId] = useState("");
+  const dispatch = useDispatch();
 
-  const handleClick = () => {};
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!fullname || !nationalId) return;
+    dispatch(createCustomer({ fullname, nationalId }));
+  };
 
   return (
     <Card>
@@ -25,7 +32,7 @@ export default function CreateCustomer() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="name">Name</Label>

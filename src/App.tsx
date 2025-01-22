@@ -1,11 +1,11 @@
-import { useSelector } from "react-redux";
 import Header from "./components/Header";
 import CreateCustomer from "./features/customers/CreateCustomer";
 import Customer from "./features/customers/Customer";
-import { RootState } from "./store";
+import { customerSelector } from "./features/customers/customerSlice";
+import { useAppSelector } from "./hooks/store";
 
 function App() {
-  const { fullname } = useSelector((state: RootState) => state.customer);
+  const { fullname } = useAppSelector(customerSelector);
 
   if (!fullname) {
     return (

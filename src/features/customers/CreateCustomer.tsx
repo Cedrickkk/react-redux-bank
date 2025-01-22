@@ -8,19 +8,19 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAppDispatch } from "@/hooks/store";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { createCustomer } from "./customerSlice";
+import { create } from "./customerSlice";
 
 export default function CreateCustomer() {
   const [fullname, setFullname] = useState("");
   const [nationalId, setNationalId] = useState("");
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!fullname || !nationalId) return;
-    dispatch(createCustomer({ fullname, nationalId }));
+    dispatch(create({ fullname, nationalId }));
   };
 
   return (

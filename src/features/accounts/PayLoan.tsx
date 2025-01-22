@@ -4,7 +4,11 @@ import { Label } from "@/components/ui/label";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
 
-export default function PayLoan() {
+type PayLoanProps = {
+  handlePayLoan: () => void;
+};
+
+export default function PayLoan({ handlePayLoan }: PayLoanProps) {
   const { loan } = useSelector((state: RootState) => state.account);
   return (
     <div className="flex items-center justify-between gap-2">
@@ -14,7 +18,11 @@ export default function PayLoan() {
         </Label>
         <Input id="pay_loan" type="number" />
       </div>
-      <Button variant="secondary" className="self-end uppercase">
+      <Button
+        variant="secondary"
+        className="self-end uppercase"
+        onClick={handlePayLoan}
+      >
         Pay Loan
       </Button>
     </div>

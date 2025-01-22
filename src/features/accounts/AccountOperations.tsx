@@ -1,7 +1,12 @@
-import { RootState } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/hooks/store";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { deposit, requestLoan, withdraw } from "./accountSlice";
+import {
+  accountSelector,
+  convertCurrency,
+  payLoan,
+  requestLoan,
+  withdraw,
+} from "./accountSlice";
 import Deposit from "./Deposit";
 import Loan from "./Loan";
 import PayLoan from "./PayLoan";
@@ -14,26 +19,31 @@ export default function AccountOperations() {
   const [loanPurpose, setLoanPurpose] = useState("");
   const [currency, setCurrency] = useState("");
 
-  const { loan } = useSelector((state: RootState) => state.account);
+  const { loan } = useAppSelector(accountSelector);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleDeposit = () => {
     if (!depositAmount) return;
-    dispatch(deposit({ amount: depositAmount }));
+    dispatch(convertCurrency({ amount: depositAmount, currency }));
     setDepositAmount(undefined);
   };
 
   const handleWithdrawal = () => {
     if (!withdrawalAmount) return;
     dispatch(withdraw({ amount: withdrawalAmount }));
+    setWithdrawalAmount(undefined);
   };
 
-  const handleLoan = () => {
+  const handleRequestLoan = () => {
     if (!loanAmount) return;
     dispatch(requestLoan({ amount: loanAmount, purpose: loanPurpose }));
-    setLoanAmount(undefined);
+    setLoanAmount(0);
     setLoanPurpose("");
+  };
+
+  const handlePayLoan = () => {
+    dispatch(payLoan());
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -61,10 +71,10 @@ export default function AccountOperations() {
         setLoanAmount={setLoanAmount}
         loanPurpose={loanPurpose}
         setLoanPurpose={setLoanPurpose}
-        handleLoan={handleLoan}
+        handleRequestLoan={handleRequestLoan}
       />
 
-      {loan > 0 && <PayLoan />}
+      {loan > 0 && <PayLoan handlePayLoan={handlePayLoan} />}
     </form>
   );
 }

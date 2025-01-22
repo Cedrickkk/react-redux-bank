@@ -1,10 +1,15 @@
-import { RootState } from "@/store";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "@/hooks/store";
+import { accountSelector } from "../accounts/accountSlice";
+import { customerSelector } from "./customerSlice";
 import AccountOperations from "../accounts/AccountOperations";
+import { formatCurrency } from "@/utils";
+import { useMemo } from "react";
 
 export default function Customer() {
-  const { fullname } = useSelector((state: RootState) => state.customer);
-  const { balance } = useSelector((state: RootState) => state.account);
+  const { fullname } = useAppSelector(customerSelector);
+  const { balance } = useAppSelector(accountSelector);
+
+  const formattedBalance = useMemo(() => formatCurrency(balance), [balance]);
 
   return (
     <div>
@@ -19,7 +24,7 @@ export default function Customer() {
               Your Balance
             </span>
             <span className="block text-xl font-bold text-black">
-              ${balance}
+              {formattedBalance}
             </span>
           </p>
         </div>

@@ -1,102 +1,90 @@
-import { Reducer } from "redux";
+import { RootState } from "@/store";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+const CURRENCY_CONVERTER_API = "https://api.frankfurter.app/latest";
 
 export type AccountState = {
   balance: number;
   loan: number;
   loanPurpose: string;
+  isLoading: boolean;
 };
 
-type DepositPayload = {
+type Currency = "USD" | "EUR" | "GBP" | "JPY" | "AUD";
+
+type ConvertedValue = {
   amount: number;
+  base: Currency;
+  date: string;
+  rates: Record<Currency, number>;
 };
 
-type WithdrawPayload = {
-  amount: number;
-};
-
-type RequestLoanPayload = {
-  amount: number;
-  purpose: string;
-};
-
-type PayLoanPayload = {
-  amount: number;
-};
-
-enum AccountActionType {
-  DEPOSIT = "account/deposit",
-  WITHDRAW = "account/withdraw",
-  REQUEST_LOAN = "account/requestLoan",
-  PAY_LOAN = "account/payLoan",
-}
-
-export type AccountAction =
-  | { type: AccountActionType.DEPOSIT; payload: DepositPayload }
-  | { type: AccountActionType.WITHDRAW; payload: WithdrawPayload }
-  | { type: AccountActionType.REQUEST_LOAN; payload: RequestLoanPayload }
-  | { type: AccountActionType.PAY_LOAN; payload: PayLoanPayload };
-
-const initialStateAccount: Readonly<AccountState> = {
+const initialState: AccountState = {
   balance: 0,
   loan: 0,
   loanPurpose: "",
+  isLoading: false,
 };
 
-const accountReducer: Reducer<AccountState, AccountAction> = (
-  state: AccountState = initialStateAccount,
-  action: AccountAction,
-): AccountState => {
-  switch (action.type) {
-    case AccountActionType.DEPOSIT:
-      return {
-        ...state,
-        balance: state.balance + action.payload.amount,
-      };
-    case AccountActionType.WITHDRAW:
-      return {
-        ...state,
-        balance: state.balance - action.payload.amount,
-      };
-    case AccountActionType.REQUEST_LOAN:
-      if (state.loan > 0) return state;
-      return {
-        ...state,
-        loan: action.payload.amount,
-        loanPurpose: action.payload.purpose,
-      };
-    case AccountActionType.PAY_LOAN:
-      return {
-        ...state,
-        loan: 0,
-        loanPurpose: "",
-        balance: state.balance - state.loan,
-      };
-    default:
-      return state;
-  }
-};
-
-export const deposit = ({ amount }: DepositPayload): AccountAction => ({
-  type: AccountActionType.DEPOSIT,
-  payload: { amount },
+const accountSlice = createSlice({
+  name: "account",
+  initialState,
+  reducers: {
+    deposit: (state, action: PayloadAction<{ amount: number }>) => {
+      state.balance += action.payload.amount;
+      state.isLoading = false;
+    },
+    withdraw: (state, action: PayloadAction<{ amount: number }>) => {
+      state.balance -= action.payload.amount;
+    },
+    requestLoan: (
+      state,
+      action: PayloadAction<{ amount: number; purpose: string }>,
+    ) => {
+      if (state.loan > 0) return;
+      state.loan = action.payload.amount;
+      state.loanPurpose = action.payload.purpose;
+      state.balance += action.payload.amount;
+    },
+    payLoan: (state) => {
+      state.balance -= state.loan;
+      state.loan = 0;
+      state.loanPurpose = "";
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(convertCurrency.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        convertCurrency.fulfilled,
+        (state, action: PayloadAction<number>) => {
+          state.balance += action.payload;
+          state.isLoading = false;
+        },
+      );
+  },
 });
 
-export const withdraw = ({ amount }: DepositPayload): AccountAction => ({
-  type: AccountActionType.WITHDRAW,
-  payload: { amount },
-});
+export const convertCurrency = createAsyncThunk(
+  "account/convertCurrency",
+  async (
+    { amount, currency }: { amount: number; currency: string },
+    thunkAPI,
+  ) => {
+    if (currency === "USD") thunkAPI.dispatch(deposit({ amount }));
 
-export const requestLoan = ({
-  amount,
-  purpose,
-}: RequestLoanPayload): AccountAction => ({
-  type: AccountActionType.REQUEST_LOAN,
-  payload: { amount, purpose },
-});
+    const response = await fetch(
+      `${CURRENCY_CONVERTER_API}?amount=${amount}&from=${currency}&to=USD`,
+    );
 
-export const payLoan = ({ amount }: PayLoanPayload): AccountAction => ({
-  type: AccountActionType.PAY_LOAN,
-  payload: { amount },
-});
+    const data: ConvertedValue = await response.json();
+    const convertedAmount = data.rates.USD;
+    return convertedAmount;
+  },
+);
 
-export default accountReducer;
+export const { deposit, withdraw, requestLoan, payLoan } = accountSlice.actions;
+export const accountSelector = (state: RootState) => state.account;
+export default accountSlice.reducer;

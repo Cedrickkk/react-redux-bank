@@ -20,7 +20,7 @@ type LoanProps = {
   setLoanAmount: (amount: number) => void;
   loanPurpose: string;
   setLoanPurpose: (purpose: string) => void;
-  handleLoan: () => void;
+  handleRequestLoan: () => void;
 };
 
 export default function Loan({
@@ -28,7 +28,7 @@ export default function Loan({
   setLoanAmount,
   loanPurpose,
   setLoanPurpose,
-  handleLoan,
+  handleRequestLoan,
 }: LoanProps) {
   return (
     <div className="flex items-center justify-between gap-2">
@@ -65,7 +65,7 @@ export default function Loan({
           </div>
           <DialogFooter>
             <DialogClose asChild>
-              <Button type="button" onClick={handleLoan}>
+              <Button type="button" onClick={handleRequestLoan}>
                 Request
               </Button>
             </DialogClose>

@@ -1,82 +1,39 @@
-import { Reducer } from "redux";
+import { RootState } from "@/store";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type CustomerState = {
+type CustomerState = {
   fullname: string;
   nationalId: string;
   createdAt?: string;
 };
 
-type CreateCustomerPayload = {
-  fullname: string;
-  nationalId: string;
-  createdAt?: string;
-};
-
-type UpdateCustomerPayload = {
-  fullname: string;
-  nationalId?: string;
-};
-
-enum CustomerActionType {
-  CREATE = "customer/create",
-  UPDATE = "customer/update",
-}
-
-export type CustomerAction =
-  | {
-      type: CustomerActionType.CREATE;
-      payload: CreateCustomerPayload;
-    }
-  | {
-      type: CustomerActionType.UPDATE;
-      payload: UpdateCustomerPayload;
-    };
-
-const initialStateCustomer: Readonly<CustomerState> = {
+const initialState: CustomerState = {
   fullname: "",
   nationalId: "",
   createdAt: "",
 };
 
-const customerReducer: Reducer<CustomerState, CustomerAction> = (
-  state: CustomerState = initialStateCustomer,
-  action: CustomerAction,
-): CustomerState => {
-  switch (action.type) {
-    case CustomerActionType.CREATE:
-      return {
-        ...state,
-        fullname: action.payload.fullname,
-        nationalId: action.payload.nationalId,
-        createdAt: action.payload.createdAt,
-      };
-    case CustomerActionType.UPDATE:
-      return {
-        ...state,
-        fullname: action.payload.fullname,
-      };
-    default:
-      return state;
-  }
-};
+const customerSlice = createSlice({
+  name: "customer",
+  initialState,
+  reducers: {
+    create: (
+      state,
+      action: PayloadAction<{
+        fullname: string;
+        nationalId: string;
+      }>,
+    ) => {
+      state.fullname = action.payload.fullname;
+      state.nationalId = action.payload.nationalId;
+      state.createdAt = new Date().toISOString();
+    },
+    update: (state, action: PayloadAction<{ fullname: string }>) => {
+      state.fullname = action.payload.fullname;
+    },
+  },
+});
 
-export const createCustomer = ({
-  fullname,
-  nationalId,
-}: CreateCustomerPayload): CustomerAction => {
-  return {
-    type: CustomerActionType.CREATE,
-    payload: { fullname, nationalId, createdAt: new Date().toISOString() },
-  };
-};
-
-export const updateCustomer = ({
-  fullname,
-}: UpdateCustomerPayload): CustomerAction => {
-  return {
-    type: CustomerActionType.UPDATE,
-    payload: { fullname },
-  };
-};
-
-export default customerReducer;
+export const { create, update } = customerSlice.actions;
+export const customerSelector = (state: RootState) => state.customer;
+export default customerSlice.reducer;

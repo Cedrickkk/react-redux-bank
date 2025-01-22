@@ -10,6 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useSelector } from "react-redux";
+import { accountSelector } from "./accountSlice";
 
 type DepositProps = {
   depositAmount: number | undefined;
@@ -26,6 +28,8 @@ export default function Deposit({
   setCurrency,
   handleDeposit,
 }: DepositProps) {
+  const { isLoading } = useSelector(accountSelector);
+
   return (
     <div className="flex w-full items-center justify-between gap-2">
       <div className="w-1/2">
@@ -63,7 +67,7 @@ export default function Deposit({
         className="self-end uppercase"
         onClick={handleDeposit}
       >
-        Deposit
+        {isLoading ? "..." : "Deposit"}
       </Button>
     </div>
   );

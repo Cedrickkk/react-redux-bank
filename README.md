@@ -1,3 +1,5 @@
+![react-redux-bank](https://github.com/user-attachments/assets/b1b1ff0b-3e2f-41e7-a55f-e3f97e03c457)
+
 # React-Redux Bank Application
 
 A simple bank application built using React, Redux, and Redux Toolkit. This application includes essential banking features such as withdrawals, deposits, loan management, and a currency converter.

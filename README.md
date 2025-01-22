@@ -28,7 +28,7 @@ To get started with the project, follow these steps:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/react-redux-bank.git cd react-redux-bank
+git clone https://github.com/cedrickkk/react-redux-bank.git cd react-redux-bank
 ```
 
 ### 2. Install dependencies

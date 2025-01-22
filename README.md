@@ -1,50 +1,42 @@
-# React + TypeScript + Vite
+# React-Redux Bank Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple bank application built using React, Redux, and Redux Toolkit. This application includes essential banking features such as withdrawals, deposits, loan management, and a currency converter.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Withdrawal**: Allows users to withdraw money from their account.
+- **Deposit**: Allows users to deposit money into their account.
+- **Pay Loan**: Users can make loan payments.
+- **Request Loan**: Users can request a loan.
+- **Currency Converter**: Converts the account balance to different currencies.
 
-## Expanding the ESLint configuration
+## Technologies Used
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **React**: Frontend framework for building the user interface
+- **Redux**: State management for handling app-wide state
+- **Redux Toolkit**: Simplifies Redux logic and improves performance
+- **TypeScript**: Adds type safety to the application
+- **ShadCN**: Provides reusable UI components for a consistent design
+- **CSS**: For styling the application
 
-- Configure the top-level `parserOptions` property like this:
+## Setup
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+To get started with the project, follow these steps:
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/your-username/react-redux-bank.git cd react-redux-bank
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### 2. Install dependencies
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+```bash
+npm install
+```
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+### 3. Run the development server
+
+```bash
+npm run dev
 ```

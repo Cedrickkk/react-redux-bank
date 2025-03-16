@@ -19,7 +19,7 @@ A simple bank application built using React, Redux, and Redux Toolkit. This appl
 - **Redux Toolkit**: Simplifies Redux logic and improves performance
 - **TypeScript**: Adds type safety to the application
 - **ShadCN**: Provides reusable UI components for a consistent design
-- **CSS**: For styling the application
+- **Tailwind CSS**: For styling the application
 
 ## Setup
 
